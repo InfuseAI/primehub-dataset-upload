@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Uppy</title>
+  <link href="{{ url_for('static', filename='node_modules/uppy/dist/uppy.min.css') }}" rel="stylesheet">
+</head>
+<body>
+  <div id="drag-drop-area" width='800px' height='500px'></div>
+
+  <script src="{{ url_for('static', filename='node_modules/uppy/dist/uppy.min.js') }}"></script>
+  <script>
+  var $_GET = {};
+  if(document.location.toString().indexOf('?') !== -1) {
+    var query = document.location
+    .toString()
+    // get the query string
+    .replace(/^.*?\?/, '')
+    // and remove any existing hash string (thanks, @vrijdenker)
+    .replace(/#.*$/, '')
+    .split('&');
+
+    for(var i=0, l=query.length; i<l; i++) {
+      var aux = decodeURIComponent(query[i]).split('=');
+      $_GET[aux[0]] = aux[1];
+    }
+  }
+
+  var uppy = Uppy.Core()
+  .use(Uppy.Dashboard, {
+    inline: true,
+    target: '#drag-drop-area',
+    height: 450,
+  })
+  .use(Uppy.Tus, {
+    endpoint: '{{primehub_scheme}}://{{primehub_domain}}{{tusd_path}}/files/'
+  })
+
+  uppy.setMeta({ dirpath: $_GET['path'] })
+
+  uppy.on('complete', (result) => {
+    console.log('Upload complete! We’ve uploaded these files:', result.successful)
+  })
+  </script>
+</body>
+</html>

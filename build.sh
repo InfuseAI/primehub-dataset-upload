@@ -1,0 +1,1 @@
+docker build -t dataset-upload-web-front-end .

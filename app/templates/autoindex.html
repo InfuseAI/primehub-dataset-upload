@@ -1,0 +1,33 @@
+{% extends '__autoindex__/autoindex.html' %}
+
+{% block meta %}
+  {{ super() }}
+  <title>Dataset Upload Server</title>
+
+  <!-- Remember to include jQuery :) -->
+  <script src="{{ url_for('static', filename='node_modules/jquery/dist/jquery.min.js') }}"></script>
+  <!-- jQuery Modal -->
+  <script src="{{ url_for('static', filename='node_modules/jquery-modal/jquery.modal.min.js') }}"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='node_modules/jquery-modal/jquery.modal.min.css') }}" />
+
+{% endblock %}
+
+{% block header %}
+  <div style="width: 80%; margin: 30px auto;">
+    <!-- Modal HTML embedded directly into document -->
+    <div id="ex1" class="modal" width="800px" height="500px" style="max-width: 860px;">
+      <iframe src="{{ url_for( 'uppy', path=curdir.path ) }}" width="800px" height="500px"></iframe>
+    </div>
+
+    <!-- Link to open the modal -->
+    <br />
+    <p><a href="#ex1" rel="modal:open" style="font-size: 1.5em">Upload Data</a></p>
+    <br />
+{% endblock %}
+
+{% block footer %}
+  </div>
+  <script>
+    $(document).on($.modal.AFTER_CLOSE, function() {location.reload();});
+  </script>
+{% endblock %}
